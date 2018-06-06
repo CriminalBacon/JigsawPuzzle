@@ -1,5 +1,7 @@
 package com.example.android.jigsawpuzzle;
 
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,9 @@ public class TouchListener implements View.OnTouchListener {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         final double tolerance = sqrt(pow(view.getWidth(), 2) + pow(view.getHeight(), 2))/10;
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+
 
         PuzzlePiece piece = (PuzzlePiece) view;
         if (!piece.canMove){
@@ -39,6 +44,8 @@ public class TouchListener implements View.OnTouchListener {
             case MotionEvent.ACTION_MOVE:
                 layoutParams.leftMargin = (int) (x - xDelta);
                 layoutParams.topMargin = (int) (y - yDelta);
+                layoutParams.bottomMargin = (int) (screenHeight - (y - piece.pieceHeight));
+                layoutParams.rightMargin = (int) (screenWidth - (x - piece.pieceWidth));
                 view.setLayoutParams(layoutParams);
                 break;
             case MotionEvent.ACTION_UP:
@@ -66,5 +73,7 @@ public class TouchListener implements View.OnTouchListener {
             parent.addView(child, 0);
         } //if
     } //sendViewToBack
+
+
 
 } //TouchListener
